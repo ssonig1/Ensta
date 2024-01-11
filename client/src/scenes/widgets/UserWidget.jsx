@@ -72,7 +72,7 @@ return (
             >
             {firstName} {lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} friends</Typography>
+            <Typography color={medium}>{Array.isArray(friends) ? friends.length : 0} friends</Typography>
         </Box>
         </FlexBetween>
         <ManageAccountsOutlined />

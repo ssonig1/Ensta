@@ -32,14 +32,15 @@ const loginSchema = yup.object().shape({
 });
 
 const initialValuesRegister = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    location: "",
-    occupation: "",
-    picture: "",  
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  location: "",
+  occupation: "",
+  picture: null,
 };
+
 
 const initialValuesLogin = {
     email: "",
@@ -66,8 +67,8 @@ formData.append("picturePath", values.picture.name);
 const savedUserResponse = await fetch(
     "http://localhost:3001/auth/register",
     {
-    method: "POST",
-    body: formData,
+      method: "POST",
+      body: formData,
     }
 );
 const savedUser = await savedUserResponse.json();
@@ -89,7 +90,7 @@ onSubmitProps.resetForm();
 if (loggedIn) {
     dispatch(
     setLogin({
-        user: loggedIn.user,
+        user: loggedIn.User,
         token: loggedIn.token,
     })
     );
@@ -97,9 +98,17 @@ if (loggedIn) {
 }
 };
 
+
 const handleFormSubmit = async (values, onSubmitProps) => {
-if (isLogin) await login(values, onSubmitProps);
-if (isRegister) await register(values, onSubmitProps);
+  
+    if (isLogin) {
+      await login(values, onSubmitProps);
+    }
+    
+    if (isRegister) {
+      await register(values, onSubmitProps);
+    }
+  
 };
 
     return (
@@ -194,14 +203,15 @@ if (isRegister) await register(values, onSubmitProps);
                             sx={{ "&:hover": { cursor: "pointer" } }}
                         >
                             <input {...getInputProps()} />
-                            {!values.picture ? (
-                            <p>Add Picture Here</p>
+                            {!values.picture || !values.picture.name ? (
+                              <p>Add Picture Here</p>
                             ) : (
-                            <FlexBetween>
+                              <FlexBetween>
                                 <Typography>{values.picture.name}</Typography>
                                 <EditOutlinedIcon />
-                            </FlexBetween>
+                              </FlexBetween>
                             )}
+
                         </Box>
                         )}
                     </Dropzone>

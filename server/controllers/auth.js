@@ -1,16 +1,15 @@
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
-import user from "../models/user.js"
+import user from "../models/user.js" 
 
 export const register= async (req,res) => {
     try {
         const {
             firstName,
             lastName,
-            email,
+            email, 
             password,
             picturePath,
-            friends,
             location,
             occupation
         } = req.body;
@@ -24,7 +23,7 @@ export const register= async (req,res) => {
             email,
             password:passwordHash,
             picturePath,
-            friends,
+            friends:[],
             location,
             occupation,
             viewedProfile:Math.floor(Math.random()*10000),
@@ -46,13 +45,12 @@ export const login = async (req,res)=>{
         const { email, password} =req.body;
         const User = await user.findOne({email:email});
         if(!User ) return res.status(400).json({msg : "User does not exist. "});
-
-        const isMatch = await bcrypt.compare( password, user.password );
+        const isMatch = await bcrypt.compare( password, User.password );
         if(! isMatch)return res.status(400).json({msg : "Invalid username or password."});
 
         const token =jwt.sign({id : User._id}, process.env.JWT_SECRET);
         delete User.password;
-        res.status(200).json({ token,user});
+        res.status(200).json({ token,User});
         
     }
     catch(err) {
